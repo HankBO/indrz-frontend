@@ -11,10 +11,7 @@ const createWmtsLayer = function (layerSrcName, type, isVisible, sourceName) {
     '{Layer}/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}' +
     type;
   const urlsbmappng = [
-    'https://maps1.wien.gv.at/basemap/' + templatepng,
-    'https://maps2.wien.gv.at/basemap/' + templatepng,
-    'https://maps3.wien.gv.at/basemap/' + templatepng,
-    'https://maps4.wien.gv.at/basemap/' + templatepng
+    'https://mapsneu.wien.gv.at/basemap/' + templatepng
   ];
   const tilegrid = new TileGrid({
     origin: [-20037508.3428, 20037508.3428],
@@ -114,4 +111,4 @@ const myMapLayer = new ImageLayer({
   crossOrigin: 'anonymous'
 });
 
-export { greyBmapat, myMapLayer };
+export { greyBmapat, myMapLayer, createWmtsLayer };

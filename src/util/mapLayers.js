@@ -4,7 +4,10 @@ import WMTS from 'ol/source/WMTS';
 import TileLayer from 'ol/layer/Tile';
 import ImageLayer from 'ol/layer/Image';
 import ImageWMS from 'ol/source/ImageWMS';
+import OSM from 'ol/source/OSM';
+import config from '~/util/indrzConfig'
 
+const { env } = config;
 const createWmtsLayer = function (layerSrcName, type, isVisible, sourceName) {
   const sm = getProjection('EPSG:3857');
   const templatepng =
@@ -88,12 +91,36 @@ const createWmtsLayer = function (layerSrcName, type, isVisible, sourceName) {
   return wmtsLayer;
 }
 
-const greyBmapat = createWmtsLayer(
-  'bmapgrau',
-  '.png',
-  true,
-  'basemap.at'
-);
+const createOSMWmtsLayer = function (layerSrcName, isVisible, opacity = 1) {
+  return new TileLayer({
+    name: layerSrcName,
+    source: new OSM(),
+    opacity: 0.7,
+    minResolution: 0.298582141738,
+    visible: isVisible,
+    type: 'background'
+  });
+}
+
+const greyBmap = (() => {
+  if (env.BASEMAP_SOURCE === 'basemap.at') {
+    return createWmtsLayer(
+      'bmapgrau',
+      '.png',
+      true,
+      'basemap.at'
+    );
+  } else if (env.BASEMAP_SOURCE === 'osm') {
+    return createOSMWmtsLayer(
+      'osmGrey',
+      true,
+      0.7
+    );
+  }
+  return null;
+})();
+
+// console.log('greyBmap created:', greyBmap);
 
 const myMapLayer = new ImageLayer({
   source: new ImageWMS({
@@ -111,4 +138,4 @@ const myMapLayer = new ImageLayer({
   crossOrigin: 'anonymous'
 });
 
-export { greyBmapat, myMapLayer, createWmtsLayer };
+export { greyBmap, myMapLayer, createWmtsLayer, createOSMWmtsLayer };

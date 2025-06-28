@@ -39,6 +39,7 @@ module.exports = {
     'vue/v-slot-style': 0,
     'no-case-declarations': 0,
     'vue/no-deprecated-v-bind-sync': 0,
-    'vue/multi-word-component-names': 0
+    'vue/multi-word-component-names': 0,
+    'eol-last': ["error", "never"]
   }
 }

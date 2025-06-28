@@ -5,10 +5,6 @@ import { defaults as defaultControls, Zoom, Attribution, ScaleLine } from 'ol/co
 import Group from 'ol/layer/Group';
 import ImageLayer from 'ol/layer/Image';
 import ImageWMS from 'ol/source/ImageWMS';
-// import { get as getProjection } from 'ol/proj.js';
-// import TileLayer from 'ol/layer/Tile.js';
-// import WMTS from 'ol/source/WMTS.js';
-// import TileGrid from 'ol/tilegrid/WMTS';
 import SourceVector from 'ol/source/Vector';
 import LayerVector from 'ol/layer/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
@@ -27,6 +23,7 @@ import Overlay from 'ol/Overlay';
 import MapStyles from './mapStyles';
 import MapHandler from './mapHandler';
 import api from './api';
+import { createOSMWmtsLayer } from './mapLayers';
 import { createWmtsLayer } from './mapLayers';
 import config from '~/util/indrzConfig'
 import POIHandler from '~/util/POIHandler';
@@ -497,12 +494,22 @@ const calculateAspectRatioFit = (srcWidth, srcHeight, maxWidth, maxHeight) => {
 
 const getLayers = () => {
   // layers
-  const greyBmapat = createWmtsLayer(
-    'bmapgrau',
-    '.png',
-    true,
-    'basemap.at'
-  );
+  let greyBmap;
+  if (env.BASEMAP_SOURCE === 'basemap.at') {
+    greyBmap = createWmtsLayer(
+      'bmapgrau',
+      '.png',
+      true,
+      'basemap.at'
+    );
+  } else if (env.BASEMAP_SOURCE === 'osm') {
+    greyBmap = createOSMWmtsLayer(
+      'osmGrey',
+      true,
+      0.7
+    );
+  }
+
   const ortho30cmBmapat = createWmtsLayer(
     'bmaporthofoto30cm',
     '.jpg',
@@ -511,7 +518,7 @@ const getLayers = () => {
   );
   // layer group
   const backgroundLayerGroup = new Group({
-    layers: [greyBmapat, ortho30cmBmapat],
+    layers: [greyBmap, ortho30cmBmapat],
     name: 'background maps'
   });
   const poiLayerGroup = new Group({
@@ -528,7 +535,7 @@ const getLayers = () => {
   return {
     baseLayers: {
       ortho30cmBmapat,
-      greyBmapat
+      greyBmap
     },
     switchableLayers: [],
     layerGroups: [

@@ -30,7 +30,7 @@ import { defaults as defaultControls } from 'ol/control';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
-import { greyBmapat } from '~/util/mapLayers';
+import { greyBmap } from '~/util/mapLayers';
 
 export default {
   name: 'BaseMap',
@@ -69,8 +69,8 @@ export default {
         controls: defaultControls().extend([mousePositionControl]),
         target: 'map',
         layers: [
-          // greyBmapat, myMapLayer
-          greyBmapat
+          // greyBmap, myMapLayer
+          greyBmap
         ],
         view: new View({
           projection: 'EPSG:3857',

@@ -26,6 +26,15 @@ const request = function (requestObj) {
   });
 };
 
+const post = function (requestObj) {
+  return axios({
+    url: `${requestObj.url || env.BASE_API_URL}${requestObj.endPoint || ''}`,
+    method: requestObj.method || 'POST',
+    headers: getAuthorizationHeader(),
+    data: requestObj.data
+  });
+}
+
 const postRequest = async function (requestObj, options = {}) {
   try {
     let data;
@@ -90,6 +99,7 @@ const getURLParamsFromPayLoad = (payload) => {
 
 export default {
   request,
+  post,
   postRequest,
   putRequest,
   getPageParams,

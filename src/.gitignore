@@ -98,6 +98,9 @@ production-tu.env
 production-wu.env
 yarn.lock
 
+# vscode settings
+.vscode/
+
 
 /test-results/
 /playwright-report/

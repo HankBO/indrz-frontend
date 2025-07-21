@@ -360,11 +360,11 @@ export default {
 
       if (this.isSatelliteMap) {
         baseLayers.ortho30cmBmapat.setVisible(false);
-        baseLayers.greyBmapat.setVisible(true);
+        baseLayers.greyBmap.setVisible(true);
         return;
       }
       baseLayers.ortho30cmBmapat.setVisible(true);
-      baseLayers.greyBmapat.setVisible(false);
+      baseLayers.greyBmap.setVisible(false);
     },
     onMenuButtonClick (type) {
       switch (type) {

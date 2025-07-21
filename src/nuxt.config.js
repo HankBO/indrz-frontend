@@ -101,7 +101,8 @@ export default {
     NEAREST_METRO_POIID: process.env.NEAREST_METRO_POIID,
     NEAREST_DEFI_POIID: process.env.NEAREST_DEFI_POIID,
     NEAREST_ENTRANCE_POIID: process.env.NEAREST_ENTRANCE_POIID,
-    DEFAULT_POI_IMAGE: process.env.DEFAULT_POI_IMAGE
+    DEFAULT_POI_IMAGE: process.env.DEFAULT_POI_IMAGE,
+    BASEMAP_SOURCE: process.env.BASEMAP_SOURCE,
   },
   publicRuntimeConfig: {
     APP_VERSION: appVersion,
@@ -126,7 +127,8 @@ export default {
     NEAREST_METRO_POIID: process.env.NEAREST_METRO_POIID,
     NEAREST_DEFI_POIID: process.env.NEAREST_DEFI_POIID,
     NEAREST_ENTRANCE_POIID: process.env.NEAREST_ENTRANCE_POIID,
-    DEFAULT_POI_IMAGE: process.env.DEFAULT_POI_IMAGE
+    DEFAULT_POI_IMAGE: process.env.DEFAULT_POI_IMAGE,
+    BASEMAP_SOURCE: process.env.BASEMAP_SOURCE,
   },
   privateRuntimeConfig: {
     TOKEN: process.env.TOKEN

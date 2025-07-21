@@ -114,6 +114,7 @@ import mapHandler from '../../util/mapHandler';
 import PoiDrawer from '@/components/drawers/PoiDrawer';
 import RouteDrawer from '@/components/drawers/RouteDrawer.vue';
 import BaseDrawer from '@/components/drawers/BaseDrawer'
+import api from '@/util/api'
 
 export default {
   components: {
@@ -215,6 +216,7 @@ export default {
       const data2 = { id: feature.properties.id, properties: feature.properties, geometry: { coordinates: feature.coordinates } }
       this.map.setGlobalRoute(data2)
     })
+    window.getPositioningUpdate = this.getPositioningUpdate;
   },
   methods: {
     ...mapActions({
@@ -332,6 +334,48 @@ export default {
     onHidePoiDrawer () {
       this.poiDrawerData = {};
       this.poiDrawer = false;
+    },
+    async sendFingerprintToBackend (message) {
+      if (this.$refs.map) {
+        try {
+          const response = await api.post({
+            endPoint: 'positioning',
+            method: 'POST',
+            data: message
+          }, {
+            baseApiUrl: process.env.BASE_API_URL,
+            token: process.env.TOKEN
+          });
+          return response && response.data ? response.data : null;
+        } catch (error) {
+          console.error('Error sending fingerprint to backend:', error);
+        }
+      }
+      return null;
+    },
+    getPositioningUpdate (message) {
+      console.log('Positioning Update:', message);
+      this.sendFingerprintToBackend(message)
+        .then((data) => {
+          if (data && window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.nativeApp) {
+            window.webkit.messageHandlers.nativeApp.postMessage({
+              type: 'getPositioningUpdate',
+              data: 'Data sent to Django successfully: '
+            });
+          } else {
+            console.warn('Positioning update failed: No room centroid or webkit message handler available.');
+          }
+        })
+        .catch((error) => {
+          console.error('Error handling positioning update:', error);
+        });
+      /*
+      const data = {
+        room_centroid: { x: 10, y: 20 } // Mocked data for testing
+      };
+      console.log('Data received from backend:', message);
+      roomCentroid = data && data.room_centroid ? data.room_centroid : null;
+      */
     }
   }
 };

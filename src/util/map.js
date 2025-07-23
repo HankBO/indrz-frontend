@@ -70,10 +70,24 @@ const initializeMap = ({
     name: 'indrzPopup'
   });
 
+  const positionLabel = new Overlay({
+    element: document.getElementById('position-label'),
+    autoPan: false,
+    autoPanAnimation: {
+      duration: 250
+    },
+    zIndex: 5,
+    name: 'positionLabel'
+  });
+
+  console.log(popup.element);
+  console.log(positionLabel.element);
+
   map.addOverlay(popup);
+  map.addOverlay(positionLabel);
 
   return {
-    view, map, layers, popup
+    view, map, layers, popup, positionLabel
   };
 };
 

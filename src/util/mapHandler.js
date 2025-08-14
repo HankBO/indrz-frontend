@@ -226,6 +226,15 @@ const openIndrzPopup = (
   popup.setOffset(offsetArray);
 };
 
+const updatePositionLabel = (positionLabel, coordinate) => {
+  positionLabel.setPosition(coordinate);
+  positionLabel.setOffset([0, 0]);
+};
+
+const closePositionLabel = (positionLabel) => {
+  positionLabel.setPosition(undefined);
+};
+
 const getTitle = (properties, locale = 'en') => {
   if (properties.street) {
     return properties.building_name;
@@ -567,6 +576,8 @@ const handleMapClick = (mapInfo, evt, layerNamePrefix) => {
 export default {
   closeIndrzPopup,
   openIndrzPopup,
+  updatePositionLabel,
+  closePositionLabel,
   getTitle,
   getBuildingLetter,
   addPoiTableRow,

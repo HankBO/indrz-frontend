@@ -217,6 +217,7 @@ export default {
       this.map.setGlobalRoute(data2)
     })
     window.getPositioningUpdate = this.getPositioningUpdate;
+    window.stopPositioningDisplay = this.stopPositioningDisplay;
   },
   methods: {
     ...mapActions({
@@ -354,14 +355,17 @@ export default {
       return null;
     },
     getPositioningUpdate (message) {
-      console.log('Positioning Update:', message);
+      // console.log('Positioning Update:', message);
       this.sendFingerprintToBackend(message)
         .then((data) => {
-          if (data && window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.nativeApp) {
+          if (data.is_success && window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.nativeApp) {
             window.webkit.messageHandlers.nativeApp.postMessage({
               type: 'getPositioningUpdate',
-              data: 'Data sent to Django successfully: '
+              data: data.room_external_id
             });
+            // pop up the red point at the room centroid
+            const coordinate = data.centroid.coordinates;
+            mapHandler.updatePositionLabel(this.$refs.map.positionLabel, coordinate);
           } else {
             console.warn('Positioning update failed: No room centroid or webkit message handler available.');
           }
@@ -369,13 +373,9 @@ export default {
         .catch((error) => {
           console.error('Error handling positioning update:', error);
         });
-      /*
-      const data = {
-        room_centroid: { x: 10, y: 20 } // Mocked data for testing
-      };
-      console.log('Data received from backend:', message);
-      roomCentroid = data && data.room_centroid ? data.room_centroid : null;
-      */
+    },
+    stopPositioningDisplay () {
+      mapHandler.closePositionLabel(this.$refs.map.positionLabel);
     }
   }
 };

@@ -95,8 +95,8 @@ const createOSMWmtsLayer = function (layerSrcName, isVisible, opacity = 1) {
   return new TileLayer({
     name: layerSrcName,
     source: new OSM(),
-    opacity: 0.7,
-    minResolution: 0.298582141738,
+    opacity: opacity,
+    minResolution: 0.07464553543,
     visible: isVisible,
     type: 'background'
   });

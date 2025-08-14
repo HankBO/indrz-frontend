@@ -35,7 +35,9 @@
     <terms :show="showTerms" @termsShow="onTermShowChange" />
     <help :show="showHelp" @helpShow="onHelpShowChange" />
     <QRCode :show="showQrCode" @qrCodeShow="onQrCodeShow" @qrCodeScanned="loadMapWithParams" />
+    <PositionLabel />
     <UserGeoLocation :map="map" class="indrz-geolocation" />
+    <TriggerPositioning :map="map" :positionLabel="positionLabel" class="indrz-positioning" />
   </div>
 </template>
 
@@ -46,6 +48,7 @@ import MapHandler from '../util/mapHandler';
 import RouteHandler from '../util/RouteHandler';
 import POIHandler from '../util/POIHandler';
 import InfoOverlay from '../components/infoOverlay';
+import PositionLabel from '../components/positionLabel';
 import 'ol/ol.css';
 import menuHandler from '../util/menuHandler';
 import config from '../util/indrzConfig';
@@ -53,6 +56,7 @@ import ShareOverlay from './share-overlay/shareOverlay';
 import Terms from './Terms';
 import Help from './Help';
 import UserGeoLocation from './UserGeoLocation';
+import TriggerPositioning from './TriggerPositioning';
 import QRCode from './QRCode';
 
 const { env } = config;
@@ -62,7 +66,9 @@ export default {
     QRCode,
     Help,
     InfoOverlay,
+    PositionLabel,
     ShareOverlay,
+    TriggerPositioning,
     Terms,
     UserGeoLocation
   },
@@ -76,6 +82,7 @@ export default {
     return {
       mapId: 'mapContainer',
       map: null,
+      positionLabel: null,
       view: null,
       showTerms: false,
       showHelp: false,
@@ -126,7 +133,7 @@ export default {
     const query = queryString.parse(location.search);
     this.showHideHeaderFooter(query);
 
-    const { view, map, layers, popup } = MapUtil.initializeMap({
+    const { view, map, layers, popup, positionLabel } = MapUtil.initializeMap({
       mapId: this.mapId,
       center: this.defaultCenter,
       zoom: this.defaultZoom
@@ -136,6 +143,7 @@ export default {
     this.map = map;
     this.layers = layers;
     this.popup = popup;
+    this.positionLabel = positionLabel;
 
     this.map.on('singleclick', this.onMapClick, this);
     window.onresize = () => {
